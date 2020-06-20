@@ -210,6 +210,7 @@ public class Main extends javax.swing.JFrame {
         groupHV.add(rdoTatCa);
         groupHV.add(rdoChuaNhap);
         groupHV.add(rdoDaNhap);
+        rdoTatCa.setSelected(true);
 
         groupNV = new ButtonGroup();
         groupNV.add(rdoTruongPhong);
@@ -1016,12 +1017,12 @@ public class Main extends javax.swing.JFrame {
     }
 
     void fillGridView() {
+
         DefaultTableModel model = (DefaultTableModel) tblHocVien.getModel();
         model.setRowCount(0);
         try {
             String sql = "SELECT hv.*, nh.HoTen FROM HocVien hv JOIN NguoiHoc nh ON nh.MaNH=hv.MaNH WHERE MaKH=?";
             ResultSet rs = jdbcDao.executeQuery(sql, maKH_O_HV);
-            System.out.println("****-----" + maKH_O_HV);
             while (rs.next()) {
                 double diem = rs.getDouble("Diem");
                 Object[] row = {rs.getInt("MaHV"), rs.getString("MaNH"),
@@ -1077,10 +1078,10 @@ public class Main extends javax.swing.JFrame {
         }
         this.fillComboBox_HocVien();
         this.fillGridView();
-//        DialogHelper.alert(this, "Cập nhật thành công!");//
         JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
     }
 
+    // người học
     void loadNH() {
         DefaultTableModel model = (DefaultTableModel) tblNguoiHoc.getModel();
         model.setRowCount(0);
@@ -1215,7 +1216,7 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, " vui lòng nhập đủ thông tin", "error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (!(txtNH_DienThoai.getText()).matches("^0\\d{9}$")) {
-            JOptionPane.showMessageDialog(this, "vui lòng nhập đúng định dạng SĐT 10 số " , "error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "vui lòng nhập đúng định dạng SĐT 10 số ", "error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (!(txtNH_Email.getText()).matches("\\w+@\\w+\\.\\w+")) {
             JOptionPane.showMessageDialog(this, " vui lòng nhập đúng định dạng email", "error", JOptionPane.ERROR_MESSAGE);
@@ -2423,6 +2424,11 @@ public class Main extends javax.swing.JFrame {
         btnNH_TimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imager/icon/icons8_search_25px.png"))); // NOI18N
         btnNH_TimKiem.setText("Tìm Kiếm");
         btnNH_TimKiem.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnNH_TimKiem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnNH_TimKiemMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
         jPanel25.setLayout(jPanel25Layout);
@@ -2780,8 +2786,15 @@ public class Main extends javax.swing.JFrame {
             new String [] {
                 "Mã HV", "Mã KH", "Họ và tên", "Điểm", "Xóa"
             }
-        ));
-        tblHocVien.setOpaque(false);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         tblHocVien.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -2792,6 +2805,11 @@ public class Main extends javax.swing.JFrame {
             }
         });
         jScrollPane5.setViewportView(tblHocVien);
+        if (tblHocVien.getColumnModel().getColumnCount() > 0) {
+            tblHocVien.getColumnModel().getColumn(4).setMinWidth(50);
+            tblHocVien.getColumnModel().getColumn(4).setPreferredWidth(50);
+            tblHocVien.getColumnModel().getColumn(4).setMaxWidth(50);
+        }
 
         rdoTatCa.setText("Tất cả");
         rdoTatCa.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -4706,38 +4724,38 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNH_themActionPerformed
 
     private void btnNH_suaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNH_suaActionPerformed
-           if (checkNH()) {
+        if (checkNH()) {
             this.updateNH();
         }
     }//GEN-LAST:event_btnNH_suaActionPerformed
 
     private void btnNH_XoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNH_XoaActionPerformed
-         this.deleteNH();
+        this.deleteNH();
     }//GEN-LAST:event_btnNH_XoaActionPerformed
 
     private void btnNH_moiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNH_moiActionPerformed
-          this.clearNH();
-          this.setStatusNH(true);
+        this.clearNH();
+        this.setStatusNH(true);
     }//GEN-LAST:event_btnNH_moiActionPerformed
 
     private void btnNL_NHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNL_NHActionPerformed
         this.indexNguoiHoc = 0;
-         this.editNH();
+        this.editNH();
     }//GEN-LAST:event_btnNL_NHActionPerformed
 
     private void btnL_NHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnL_NHActionPerformed
         this.indexNguoiHoc--;
-            this.editNH();
+        this.editNH();
     }//GEN-LAST:event_btnL_NHActionPerformed
 
     private void btnNR_NHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNR_NHActionPerformed
-          this.indexNguoiHoc = tblNguoiHoc.getRowCount() - 1;
-          this.editNH();
+        this.indexNguoiHoc = tblNguoiHoc.getRowCount() - 1;
+        this.editNH();
     }//GEN-LAST:event_btnNR_NHActionPerformed
 
     private void btnR_NHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnR_NHActionPerformed
-          this.indexNguoiHoc++;
-          this.editNH();
+        this.indexNguoiHoc++;
+        this.editNH();
     }//GEN-LAST:event_btnR_NHActionPerformed
 
     private void jTabbQLNguoiHocAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTabbQLNguoiHocAncestorAdded
@@ -4880,7 +4898,7 @@ public class Main extends javax.swing.JFrame {
 
     private void tblNguoiHocMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNguoiHocMouseClicked
 
- if (evt.getClickCount() == 1) {
+        if (evt.getClickCount() == 1) {
             this.indexNguoiHoc = tblNguoiHoc.rowAtPoint(evt.getPoint());
             if (this.indexNguoiHoc >= 0) {
                 this.editNH();
@@ -4924,8 +4942,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jTabbQLKhoaHocAncestorAdded
 
     private void jTabbQLHocVienAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTabbQLHocVienAncestorAdded
-        this.fillComboBox_HocVien();
-        this.fillGridView();
+
 
     }//GEN-LAST:event_jTabbQLHocVienAncestorAdded
 
@@ -5009,6 +5026,7 @@ public class Main extends javax.swing.JFrame {
 
     private void btnHV_themActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHV_themActionPerformed
         this.insertHV();
+        txtHV_diem.setText("");
     }//GEN-LAST:event_btnHV_themActionPerformed
 
     private void rdoTatCaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rdoTatCaMouseClicked
@@ -5028,8 +5046,8 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHV_CapNhatActionPerformed
 
     private void jPanel18AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel18AncestorAdded
-//         this.fillComboBox_HocVien();
-//        this.fillGridView();
+        this.fillComboBox_HocVien();
+        this.fillGridView();
 
     }//GEN-LAST:event_jPanel18AncestorAdded
 
@@ -5043,6 +5061,10 @@ public class Main extends javax.swing.JFrame {
     private void cbbTK_NamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbTK_NamActionPerformed
         fillTableDoanhThu_TK();
     }//GEN-LAST:event_cbbTK_NamActionPerformed
+
+    private void btnNH_TimKiemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNH_TimKiemMouseClicked
+        this.loadNH();
+    }//GEN-LAST:event_btnNH_TimKiemMouseClicked
 
     /**
      * @param args the command line arguments

@@ -1956,6 +1956,9 @@
                                   </Border>
                                 </Property>
                               </Properties>
+                              <Events>
+                                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnNH_TimKiemMouseClicked"/>
+                              </Events>
                             </Component>
                           </SubComponents>
                         </Container>
@@ -2703,7 +2706,7 @@
                                         <Column editable="true" title="M&#xe3; KH" type="java.lang.Object"/>
                                         <Column editable="true" title="H&#x1ecd; v&#xe0; t&#xea;n" type="java.lang.Object"/>
                                         <Column editable="true" title="&#x110;i&#x1ec3;m" type="java.lang.Object"/>
-                                        <Column editable="true" title="X&#xf3;a" type="java.lang.Object"/>
+                                        <Column editable="true" title="X&#xf3;a" type="java.lang.Boolean"/>
                                       </Table>
                                     </Property>
                                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -2728,14 +2731,13 @@
                                           <Editor/>
                                           <Renderer/>
                                         </Column>
-                                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                        <Column maxWidth="50" minWidth="50" prefWidth="50" resizable="true">
                                           <Title/>
                                           <Editor/>
                                           <Renderer/>
                                         </Column>
                                       </TableColumnModel>
                                     </Property>
-                                    <Property name="opaque" type="boolean" value="false"/>
                                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                                     </Property>

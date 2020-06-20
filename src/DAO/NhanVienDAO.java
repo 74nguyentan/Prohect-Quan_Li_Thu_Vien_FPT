@@ -32,7 +32,7 @@ public class NhanVienDAO {
     }
     
      public void UpdateMK(NhanVienV model) {
-        String sql = " update Userr set MatKhau=? where MaNV =?";
+        String sql = " update NhanVien set MatKhau=? where MaNV =?";
         jdbcDao.executeUpdate(sql, model.getMatKhau(), model.getMaNV());
     }
 
