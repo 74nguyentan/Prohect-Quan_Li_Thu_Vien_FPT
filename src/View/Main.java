@@ -33,6 +33,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.List;
 import javax.swing.ButtonGroup;
@@ -977,6 +978,21 @@ public class Main extends javax.swing.JFrame {
         } else if (Double.parseDouble(txtKH_HocPhi.getText()) < 0) {
             JOptionPane.showMessageDialog(this, "Học phí không được nhỏ hơn 0", "error", JOptionPane.ERROR_MESSAGE);
             return false;
+        } else if (txtKH_ngayKhaiGiang.getText().length() == 0) {
+            DialogHelper.alert(this, "Vui lòng nhập ngày sinh!");
+            txtKH_ngayKhaiGiang.requestFocus();
+            return false;
+        }
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        format.setLenient(false);
+        String date = txtKH_ngayKhaiGiang.getText();
+        String date2 = txtKH_ngayTao.getText();
+        try {
+            format.parse(date);
+            format.parse(date2);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng kiểu ngày!", "error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
         return true;
     }
@@ -1216,10 +1232,23 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, " vui lòng nhập đủ thông tin", "error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (!(txtNH_DienThoai.getText()).matches("^0\\d{9}$")) {
-            JOptionPane.showMessageDialog(this, "vui lòng nhập đúng định dạng SĐT 10 số ", "error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "vui lòng nhập đúng định dạng SĐT 10 số và bắt đầu bằng số 0", "error", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (!(txtNH_Email.getText()).matches("\\w+@\\w+\\.\\w+")) {
             JOptionPane.showMessageDialog(this, " vui lòng nhập đúng định dạng email", "error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (txtNH_NgaySinh.getText().length() == 0) {
+            DialogHelper.alert(this, "Vui lòng nhập ngày sinh!");
+            txtNH_NgaySinh.requestFocus();
+            return false;
+        }
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        format.setLenient(false);
+        String date = txtNH_NgaySinh.getText();
+        try {
+            format.parse(date);
+        } catch (Exception e) {
+            DialogHelper.alert(this, "Vui lòng nhập đúng kiểu ngày!");
             return false;
         }
 
